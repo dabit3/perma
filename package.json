@@ -1,0 +1,25 @@
+{
+  "name": "arweave-bundlr-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "export": "next build && next export",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@bundlr-network/client": "^0.7.3",
+    "bignumber.js": "^9.0.2",
+    "ethers": "^5.6.4",
+    "next": "12.1.6",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "streams": "^0.0.8"
+  },
+  "devDependencies": {
+    "eslint": "8.14.0",
+    "eslint-config-next": "12.1.6"
+  }
+}
