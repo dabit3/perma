@@ -28,7 +28,7 @@ npm install
 yarn 
 ```
 
-2. Update the `APP_NAME` to something that is unique to your app, could be anything you'd like:
+2. Update the `APP_NAME` in __utils.js __ to something that is unique to your app, could be anything you'd like:
 
 ```sh
 export const APP_NAME = "YOUR_UNIQUE_APP_NAME"
