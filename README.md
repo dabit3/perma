@@ -6,9 +6,9 @@ Perma is a prototype of permanent video storage and client-side rendering using 
 
 Technologies used:
 
-[Arweave](https://www.arweave.org/) - File storage
-[Bundlr](https://bundlr.network/) - Multichain solution for Arweave integration
-[Next.js](https://nextjs.org/) - React framework
+- [Arweave](https://www.arweave.org/) - File storage
+- [Bundlr](https://bundlr.network/) - Multichain solution for Arweave integration
+- [Next.js](https://nextjs.org/) - React framework
 
 ### Building and running the app
 
