@@ -37,7 +37,7 @@ export const APP_NAME = "YOUR_UNIQUE_APP_NAME"
 3. Run the app
 
 ```sh
-npm start
+npm run dev
 ```
 
 ### Limitations

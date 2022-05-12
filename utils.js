@@ -1,7 +1,7 @@
 import Arweave from 'arweave'
 
-export const arweave = Arweave.init({});
-export const APP_NAME = "PERMA_VIDEO_APP_TEST_NAME"
+export const arweave = Arweave.init({})
+export const APP_NAME = "PERMA_VIDEO_APP_TEST_NAME_2"
 
 export const createPostInfo = async (node) => {
   const ownerAddress = node.owner.address;
