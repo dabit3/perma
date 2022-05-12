@@ -32,7 +32,12 @@ export default function Home() {
             <video key={video.URI} width="620" controls>
               <source src={video.URI} type="video/mp4"/>
             </video>
-            <h3 style={titleStyle}>{video.title}</h3>
+            <div style={titleContainerStyle}>
+              <h3 style={titleStyle}>{video.title}</h3>
+              <a  style={iconStyle}  target="_blank" rel="noreferrer" href={video.URI}>
+                <img src="/arrow.svg" />
+              </a>
+            </div>
             <p style={descriptionStyle}>{video.description}</p>
           </div>
         ))
@@ -50,6 +55,18 @@ const containerStyle = {
   flexDirection: 'column'
 }
 
+const iconStyle = {
+  width: '20px',
+  marginLeft: '19px',
+  marginTop: '14px'
+}
+
+const titleContainerStyle = {
+  display: 'flex',
+  justifyContent: 'flex-start',
+  margin: '19px 0px 8px'
+}
+
 const videoContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -57,7 +74,8 @@ const videoContainerStyle = {
 }
 
 const titleStyle = {
-  margin: '15px 0px 10px'
+  margin:  0,
+  fontSize: '30px'
 }
 
 const descriptionStyle = {
