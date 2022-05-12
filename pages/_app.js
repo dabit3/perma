@@ -3,12 +3,13 @@ import { WebBundlr } from "@bundlr-network/client"
 import { MainContext } from '../context'
 import { useState, useRef } from 'react'
 import { providers, utils } from 'ethers'
-
 import Link from 'next/link'
 
 function MyApp({ Component, pageProps }) {
   const [bundlrInstance, setBundlrInstance] = useState()
   const [balance, setBalance] = useState()
+  const [currency, setCurrency] = useState('matic')
+
   const bundlrRef = useRef()
   async function initialiseBundlr() {
     await window.ethereum.enable()
@@ -16,7 +17,7 @@ function MyApp({ Component, pageProps }) {
     const provider = new providers.Web3Provider(window.ethereum);
     await provider._ready()
   
-    const bundlr = new WebBundlr("https://node1.bundlr.network", "matic", provider)
+    const bundlr = new WebBundlr("https://node1.bundlr.network", currency, provider)
     await bundlr.ready()
     
     setBundlrInstance(bundlr)
@@ -43,13 +44,20 @@ function MyApp({ Component, pageProps }) {
             </div>
           </a>
         </Link>
+        <div style={externalContainerLinkStyle}>
+          <p style={linkParagraphStyle}>
+            Built with <a target="_blank" rel="noreferrer" style={linkStyle} href="https://bundlr.network/">Bundlr</a> and <a target="_blank" rel="noreferrer" href="https://www.arweave.org/" style={linkStyle} >Arweave</a>
+          </p>
+        </div>
       </nav>
       <div style={containerStyle}>
         <MainContext.Provider value={{
           initialiseBundlr,
           bundlrInstance,
           balance,
-          fetchBalance
+          fetchBalance,
+          currency,
+          setCurrency
         }}>
           <Component {...pageProps} />
         </MainContext.Provider>
@@ -110,6 +118,21 @@ const containerStyle = {
   width: '900px',
   margin: '0 auto',
   padding: '40px'
+}
+
+const externalContainerLinkStyle = {
+  display: 'flex',
+  flex: '1',
+  justifyContent: 'flex-end'
+}
+
+const linkParagraphStyle = {
+  fontSize: '12px',
+  fontWeight: 300
+}
+
+const linkStyle = {
+  color: '#0066ff'
 }
 
 export default MyApp

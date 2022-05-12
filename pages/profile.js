@@ -2,9 +2,24 @@ import { useState, useContext } from 'react'
 import { MainContext } from '../context'
 import { APP_NAME } from '../utils'
 import { useRouter } from 'next/router' 
+import Select from 'react-select'
+
+const supportedCurrencies = {
+  matic: 'matic',
+  ethereum: 'ethereum',
+  avalanche: 'avalanche',
+  bnb: 'bnb',
+  arbitrum: 'arbitrum'
+}
+
+const options = Object.keys(supportedCurrencies).map(v => {
+  return {
+    value: v, label: v
+  }
+})
 
 export default function Profile() {
-  const { balance, bundlrInstance, fetchBalance, initialiseBundlr } = useContext(MainContext)
+  const { balance, bundlrInstance, fetchBalance, initialiseBundlr, currency, setCurrency } = useContext(MainContext)
   const [file, setFile] = useState()
   const [image, setImage] = useState()
   const [title, setTitle] = useState('')
@@ -83,8 +98,14 @@ export default function Profile() {
 
   if (!bundlrInstance) {
    return  (
+     <div>
+        <div style={selectContainerStyle} >
+          <Select onChange={({ value }) => setCurrency(value)} options={options} />
+          <p>Currency: {currency}</p>
+        </div>
      <div style={containerStyle}>
        <button style={wideButtonStyle} onClick={initialiseBundlr}>Connect Wallet</button>
+     </div>
      </div>
     )
   }
@@ -135,12 +156,16 @@ export default function Profile() {
   )
 }
 
+const selectContainerStyle = {
+  margin: '10px 0px 20px'
+}
+
 const linkStyle = {
   margin: '15px 0px'
 }
 
 const containerStyle = {
-  padding: '100px 20px',
+  padding: '10px 20px',
   display: 'flex',
   justifyContent: 'center'
 }

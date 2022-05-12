@@ -28,7 +28,7 @@ export default function Home() {
     <div style={containerStyle}>
       {
         videos.map(video => (
-          <div style={videoContainerStyle}>
+          <div style={videoContainerStyle} key={video.URI}>
             <video key={video.URI} width="620" controls>
               <source src={video.URI} type="video/mp4"/>
             </video>
