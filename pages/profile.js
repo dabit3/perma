@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
 import { MainContext } from '../context'
 import { APP_NAME } from '../utils'
+import { useRouter } from 'next/router' 
 
 export default function Profile() {
   const { balance, bundlrInstance, fetchBalance, initialiseBundlr } = useContext(MainContext)
@@ -8,6 +9,7 @@ export default function Profile() {
   const [image, setImage] = useState()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const router = useRouter()
 
   const [URI, setURI] = useState()
   const [amount, setAmount] = useState()
@@ -74,6 +76,9 @@ export default function Profile() {
     const { data } = await tx.upload()
 
     console.log(`http://arweave.net/${data.id}`)
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
   }
 
   if (!bundlrInstance) {
