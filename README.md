@@ -2,7 +2,7 @@
 
 ![PERMA](perma.jpg)
 
-Perma is a prototype of permanent video storage and viewing using Next.js, Arweave, and Bundlr.
+Perma is a prototype of permanent video storage and client-side rendering using Next.js, Arweave, and Bundlr.
 
 Technologies used:
 
