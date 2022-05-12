@@ -1,10 +1,13 @@
 import { useState, useContext } from 'react'
 import { MainContext } from '../context'
+import { APP_NAME } from '../utils'
 
 export default function Profile() {
   const { balance, bundlrInstance, fetchBalance, initialiseBundlr } = useContext(MainContext)
   const [file, setFile] = useState()
   const [image, setImage] = useState()
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
 
   const [URI, setURI] = useState()
   const [amount, setAmount] = useState()
@@ -51,16 +54,34 @@ export default function Profile() {
     setURI(`http://arweave.net/${tx.data.id}`)
   }
 
+  async function saveVideo() {
+    if (!file) return
+    const tags = [
+      { name: 'Content-Type', value: 'text/plain' },
+      { name: 'App-Name', value: APP_NAME }
+    ]
+
+    const video = {
+      title,
+      description,
+      URI,
+      createdAt: new Date(),
+      createdBy: bundlrInstance.address,
+    }
+
+    let tx = await bundlrInstance.createTransaction(JSON.stringify(video), { tags })
+    await tx.sign()
+    const { data } = await tx.upload()
+
+    console.log(`http://arweave.net/${data.id}`)
+  }
+
   if (!bundlrInstance) {
    return  (
      <div style={containerStyle}>
        <button style={wideButtonStyle} onClick={initialiseBundlr}>Connect Wallet</button>
      </div>
     )
-  }
-
-  async function saveVideo() {
-
   }
 
   return (
@@ -76,7 +97,7 @@ export default function Profile() {
         </div>
         {
           image && (
-            <video width="320" height="240" controls style={videoStyle}>
+            <video key={image} width="520" controls style={videoStyle}>
               <source src={image} type="video/mp4"/>
             </video>
           )
@@ -90,10 +111,10 @@ export default function Profile() {
                 <a href={URI}>{URI}</a>
                </p>
                <div style={formStyle}>
-                 <p style={labelStyle}>Video Title</p>
-                 <input style={inputStyle} />
-                 <p style={labelStyle}>Video Description</p>
-                 <textarea style={inputStyle}  />
+                 <p style={labelStyle}>Title</p>
+                 <input style={inputStyle} onChange={e => setTitle(e.target.value)} placeholder='Video title' />
+                 <p style={labelStyle}>Description</p>
+                 <textarea placeholder='Video description' onChange={e => setDescription(e.target.value)} style={textAreaStyle}  />
                  <button style={saveVideoButtonStyle} onClick={saveVideo}>Save Video</button>
                </div>
             </div>
@@ -151,6 +172,12 @@ const inputStyle = {
   outline: 'none',
   backgroundColor: 'rgba(0, 0, 0, .08)',
   marginBottom: '10px'
+}
+
+const textAreaStyle = {
+  ...inputStyle,
+  width: '350px',
+  height: '90px'
 }
 
 const buttonStyle = {
