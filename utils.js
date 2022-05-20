@@ -1,7 +1,7 @@
 import Arweave from 'arweave'
 
 export const arweave = Arweave.init({})
-export const APP_NAME = "PERMA_VIDEO_APP_TEST_NAME_2"
+export const APP_NAME = "PERMA_VIDEO_APP_TEST_NAME_3"
 
 export const createPostInfo = async (node) => {
   const ownerAddress = node.owner.address;
@@ -21,7 +21,8 @@ export const createPostInfo = async (node) => {
 
  export const buildQuery = () => {
   const queryObject = { query: `{
-    transactions(first: 50,
+    transactions(
+      first: 50,
       tags: [
         {
           name: "App-Name",

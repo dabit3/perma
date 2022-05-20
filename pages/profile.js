@@ -1,7 +1,8 @@
 import { useState, useContext } from 'react'
 import { MainContext } from '../context'
 import { APP_NAME } from '../utils'
-import { useRouter } from 'next/router' 
+import { useRouter } from 'next/router'
+import BigNumber from 'bignumber.js'
 import Select from 'react-select'
 
 const supportedCurrencies = {
@@ -100,7 +101,11 @@ export default function Profile() {
    return  (
      <div>
         <div style={selectContainerStyle} >
-          <Select onChange={({ value }) => setCurrency(value)} options={options} />
+          <Select
+            onChange={({ value }) => setCurrency(value)}
+            options={options}
+            defaultValue={{ value: currency, label: currency }}
+          />
           <p>Currency: {currency}</p>
         </div>
      <div style={containerStyle}>
