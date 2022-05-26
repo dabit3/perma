@@ -1,27 +1,35 @@
 import { buildQuery, arweave, createPostInfo } from '../utils'
 import { useEffect, useState } from 'react'
 
+const wait = (ms) => new Promise((res) => setTimeout(res, ms))
+
 export default function Home() {
   const [videos, setVideos] = useState([])
   useEffect(() => {
     getPostInfo()
   }, [])
 
-  async function getPostInfo(topicFilter = null) {
-    const query = buildQuery(topicFilter)
-    const results = await arweave.api.post('/graphql', query)
-      .catch(err => {
-        console.error('GraphQL query failed')
-         throw new Error(err);
-      });
-    const edges = results.data.data.transactions.edges
-    const posts = await Promise.all(
-      edges.map(async edge => await createPostInfo(edge.node))
-    )
-    let sorted = posts.sort((a, b) => new Date(b.request.data.createdAt) - new Date(a.request.data.createdAt))
-    sorted = sorted.map(s => s.request.data)
-    console.log('sorted: ', sorted)
-    setVideos(sorted)
+  async function getPostInfo(topicFilter = null, depth = 0) {
+    try {
+      const query = buildQuery(topicFilter)
+      const results = await arweave.api.post('/graphql', query)
+        .catch(err => {
+          console.error('GraphQL query failed')
+          throw new Error(err);
+        });
+      const edges = results.data.data.transactions.edges
+      const posts = await Promise.all(
+        edges.map(async edge => await createPostInfo(edge.node))
+      )
+      let sorted = posts.sort((a, b) => new Date(b.request.data.createdAt) - new Date(a.request.data.createdAt))
+      sorted = sorted.map(s => s.request.data)
+      console.log('sorted: ', sorted)
+      setVideos(sorted)
+    } catch (err) {
+      await wait(2 ** depth * 10)
+      getPostInfo(depth + 1)
+      console.log('error: ', err)
+    }
   }
 
   return (
