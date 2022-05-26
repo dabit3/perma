@@ -1,5 +1,6 @@
 import { buildQuery, arweave, createPostInfo } from '../utils'
 import { useEffect, useState } from 'react'
+import { css } from '@emotion/css'
 
 const wait = (ms) => new Promise((res) => setTimeout(res, ms))
 
@@ -33,20 +34,20 @@ export default function Home() {
   }
 
   return (
-    <div style={containerStyle}>
+    <div className={containerStyle}>
       {
         videos.map(video => (
-          <div style={videoContainerStyle} key={video.URI}>
+          <div className={videoContainerStyle} key={video.URI}>
             <video key={video.URI} width="620" controls>
               <source src={video.URI} type="video/mp4"/>
             </video>
-            <div style={titleContainerStyle}>
-              <h3 style={titleStyle}>{video.title}</h3>
-              <a  style={iconStyle}  target="_blank" rel="noreferrer" href={video.URI}>
+            <div className={titleContainerStyle}>
+              <h3 className={titleStyle}>{video.title}</h3>
+              <a className={iconStyle}  target="_blank" rel="noreferrer" href={video.URI}>
                 <img src="/arrow.svg" />
               </a>
             </div>
-            <p style={descriptionStyle}>{video.description}</p>
+            <p className={descriptionStyle}>{video.description}</p>
           </div>
         ))
       }
@@ -54,38 +55,38 @@ export default function Home() {
   )
 }
 
-const containerStyle = {
-  width: '620px',
-  margin: '0 auto',
-  padding: '40px 20px',
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'column'
-}
+const containerStyle = css`
+  width: 620px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`
 
-const iconStyle = {
-  width: '20px',
-  marginLeft: '19px',
-  marginTop: '14px'
-}
+const iconStyle = css`
+  width: 20px;
+  marginLeft: 19px;
+  marginTop: 14px;
+`
 
-const titleContainerStyle = {
-  display: 'flex',
-  justifyContent: 'flex-start',
-  margin: '19px 0px 8px'
-}
+const titleContainerStyle = css`
+  display: flex;
+  justify-content: flex-start;
+  margin: 19px 0px 8px;
+`
 
-const videoContainerStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  margin: '20px 0px 40px'
-}
+const videoContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0px 40px;
+`
 
-const titleStyle = {
-  margin:  0,
-  fontSize: '30px'
-}
+const titleStyle = css`
+  margin:  0;
+  fontSize: 30px;
+`
 
-const descriptionStyle = {
-  margin: 0
-}
+const descriptionStyle = css`
+  margin: 0;
+`
