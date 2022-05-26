@@ -2,6 +2,7 @@ import { useState, useContext } from 'react'
 import { MainContext } from '../context'
 import { APP_NAME } from '../utils'
 import { useRouter } from 'next/router'
+import { css } from '@emotion/css'
 import BigNumber from 'bignumber.js'
 import Select from 'react-select'
 
@@ -100,7 +101,7 @@ export default function Profile() {
   if (!bundlrInstance) {
    return  (
      <div>
-        <div style={selectContainerStyle} >
+        <div className={selectContainerStyle} >
           <Select
             onChange={({ value }) => setCurrency(value)}
             options={options}
@@ -108,8 +109,8 @@ export default function Profile() {
           />
           <p>Currency: {currency}</p>
         </div>
-     <div style={containerStyle}>
-       <button style={wideButtonStyle} onClick={initialiseBundlr}>Connect Wallet</button>
+     <div className={containerStyle}>
+       <button className={wideButtonStyle} onClick={initialiseBundlr}>Connect Wallet</button>
      </div>
      </div>
     )
@@ -117,10 +118,10 @@ export default function Profile() {
 
   return (
     <div>
-      <h3 style={balanceStyle}>💰 Balance {Math.round(balance * 100) / 100}</h3>
-      <div style={formStyle}>
-        <p style={labelStyle}>Add Video</p>
-        <div style={inputContainerStyle}>
+      <h3 className={balanceStyle}>💰 Balance {Math.round(balance * 100) / 100}</h3>
+      <div className={formStyle}>
+        <p className={labelStyle}>Add Video</p>
+        <div className={inputContainerStyle}>
         <input
           type="file"
           onChange={onFileChange}
@@ -128,117 +129,117 @@ export default function Profile() {
         </div>
         {
           image && (
-            <video key={image} width="520" controls style={videoStyle}>
+            <video key={image} width="520" controls className={videoStyle}>
               <source src={image} type="video/mp4"/>
             </video>
           )
 
         }
-        <button style={buttonStyle} onClick={uploadFile}>Upload Video</button>
+        <button className={buttonStyle} onClick={uploadFile}>Upload Video</button>
         {
           URI && (
             <div>
-               <p style={linkStyle} >
+               <p className={linkStyle} >
                 <a href={URI}>{URI}</a>
                </p>
-               <div style={formStyle}>
-                 <p style={labelStyle}>Title</p>
-                 <input style={inputStyle} onChange={e => setTitle(e.target.value)} placeholder='Video title' />
-                 <p style={labelStyle}>Description</p>
-                 <textarea placeholder='Video description' onChange={e => setDescription(e.target.value)} style={textAreaStyle}  />
-                 <button style={saveVideoButtonStyle} onClick={saveVideo}>Save Video</button>
+               <div className={formStyle}>
+                 <p className={labelStyle}>Title</p>
+                 <input className={inputStyle} onChange={e => setTitle(e.target.value)} placeholder='Video title' />
+                 <p className={labelStyle}>Description</p>
+                 <textarea placeholder='Video description' onChange={e => setDescription(e.target.value)} className={textAreaStyle}  />
+                 <button className={saveVideoButtonStyle} onClick={saveVideo}>Save Video</button>
                </div>
             </div>
           )
         }
       </div>
-      <div style={bottomFormStyle}>
-        <p style={labelStyle}>Fund Wallet</p>
-        <input placeholder='amount' style={inputStyle} onChange={e => setAmount(e.target.value)} />
-        <button style={buttonStyle} onClick={fundWallet}>Send transaction</button>
+      <div className={bottomFormStyle}>
+        <p className={labelStyle}>Fund Wallet</p>
+        <input placeholder='amount' className={inputStyle} onChange={e => setAmount(e.target.value)} />
+        <button className={buttonStyle} onClick={fundWallet}>Send transaction</button>
       </div>
     </div>
   )
 }
 
-const selectContainerStyle = {
-  margin: '10px 0px 20px'
-}
+const selectContainerStyle = css`
+  margin: 10px 0px 20px;
+`
 
-const linkStyle = {
-  margin: '15px 0px'
-}
+const linkStyle = css`
+  margin: 15px 0px;
+`
 
-const containerStyle = {
-  padding: '10px 20px',
-  display: 'flex',
-  justifyContent: 'center'
-}
+const containerStyle = css`
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+`
 
-const inputContainerStyle = {
-  margin: '0px 0px 25px'
-}
+const inputContainerStyle = css`
+  margin: 0px 0px 25px;
+`
 
-const videoStyle = {
-  marginBottom: '20px'
-}
+const videoStyle = css`
+  margin-bottom: 20px;
+`
 
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  padding: '20px 0px 0px'
-}
+const formStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 0px 0px;
+`
 
-const bottomFormStyle = {
-  ...formStyle,
-  marginTop: '35px',
-  borderTop: '1px solid rgba(0, 0, 0, .1)'
-}
+const bottomFormStyle = css`
+  ${formStyle};
+  margin-top: 35px;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+`
 
-const labelStyle = {
-  margin: '0px 0px 5px'
-}
+const labelStyle = css`
+  margin: 0px 0px 5px;
+`
 
-const inputStyle = {
-  padding: '12px 20px',
-  borderRadius: '5px',
-  border: 'none',
-  outline: 'none',
-  backgroundColor: 'rgba(0, 0, 0, .08)',
-  marginBottom: '10px'
-}
+const inputStyle = css`
+  padding: 12px 20px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: rgba(0, 0, 0, .08);
+  margin-bottom: 10px;
+`
 
-const textAreaStyle = {
-  ...inputStyle,
-  width: '350px',
-  height: '90px'
-}
+const textAreaStyle = css`
+  ${inputStyle};
+  width: 350px;
+  height: 90px;
+`
 
-const buttonStyle = {
-  backgroundColor: 'black',
-  color: 'white',
-  padding: '15px 20px',
-  borderRadius: '50px',
-  fontWeight: 700,
-  width: 180
-}
+const buttonStyle = css`
+  background-color: black;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 50px;
+  font-weight: 700;
+  width: 180;
+`
 
-const saveVideoButtonStyle = {
-  ...buttonStyle,
-  marginTop: '15px'
-}
+const saveVideoButtonStyle = css`
+  ${buttonStyle};
+  margin-top: 15px;
+`
 
-const wideButtonStyle = {
-  ...buttonStyle,
-  width: '380px'
-}
+const wideButtonStyle = css`
+  ${buttonStyle};
+  width: 380px;
+`
 
-const balanceStyle = {
-  padding: '10px 25px',
-  backgroundColor: 'rgba(0, 0, 0, .08)',
-  borderRadius: '30px',
-  display: 'inline-block',
-  width: 200,
-  textAlign: 'center'
-}
+const balanceStyle = css`
+  padding: 10px 25px;
+  background-color: rgba(0, 0, 0, .08);
+  border-radius: 30px;
+  display: inline-block;
+  width: 200px;
+  text-align: center;
+`
