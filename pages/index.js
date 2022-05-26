@@ -27,7 +27,7 @@ export default function Home() {
       setVideos(sorted)
     } catch (err) {
       await wait(2 ** depth * 10)
-      getPostInfo(depth + 1)
+      getPostInfo(topicFilter, depth + 1)
       console.log('error: ', err)
     }
   }
