@@ -3,6 +3,7 @@ import { WebBundlr } from "@bundlr-network/client"
 import { MainContext } from '../context'
 import { useState, useRef } from 'react'
 import { providers, utils } from 'ethers'
+import { css } from '@emotion/css'
 import Link from 'next/link'
 
 function MyApp({ Component, pageProps }) {
@@ -33,24 +34,24 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <div>
-      <nav style={navStyle}>
+      <nav className={navStyle}>
         <Link href="/">
           <a>
-            <div style={homeLinkStyle}>
-            <img src="/icon.svg" style={iconStyle} />
-            <p style={homeLinkTextStyle}>
-              PERMA
-            </p>
+            <div className={homeLinkStyle}>
+              <img src="/icon.svg" className={iconStyle} />
+              <p className={homeLinkTextStyle}>
+                PERMA
+              </p>
             </div>
           </a>
         </Link>
-        <div style={externalContainerLinkStyle}>
-          <p style={linkParagraphStyle}>
-            Built with <a target="_blank" rel="noreferrer" style={linkStyle} href="https://bundlr.network/">Bundlr</a> and <a target="_blank" rel="noreferrer" href="https://www.arweave.org/" style={linkStyle} >Arweave</a>
+        <div className={externalContainerLinkStyle}>
+          <p className={linkParagraphStyle}>
+            Built with <a target="_blank" rel="noreferrer" className={linkStyle} href="https://bundlr.network/">Bundlr</a> and <a target="_blank" rel="noreferrer" href="https://www.arweave.org/" className={linkStyle} >Arweave</a>
           </p>
         </div>
       </nav>
-      <div style={containerStyle}>
+      <div className={containerStyle}>
         <MainContext.Provider value={{
           initialiseBundlr,
           bundlrInstance,
@@ -62,7 +63,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </MainContext.Provider>
       </div>
-      <footer style={footerStyle}>
+      <footer className={footerStyle}>
           <Link href="/profile">
             <a>
               ADMIN
@@ -76,63 +77,63 @@ function MyApp({ Component, pageProps }) {
 const navHeight = 80
 const footerHeight = 70
 
-const navStyle = {
-  height: `${navHeight}px`,
-  padding: '40px 100px',
-  borderBottom: '1px solid #ededed',
-  display: 'flex',
-  alignItems: 'center',
-}
+const navStyle = css`
+  height: ${navHeight}px;
+  padding: 40px 100px;
+  border-bottom: 1px solid #ededed;
+  display: flex;
+  align-items: center;
+`
 
-const iconStyle = {
-  width: '52px',
-  transform: 'rotate(-90deg)',
-}
+const iconStyle = css`
+  width: 52px;
+  transform: rotate(-90deg);
+`
 
-const homeLinkStyle = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-}
+const homeLinkStyle = css`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
 
-const homeLinkTextStyle = {
-  fontWeight: 200,
-  fontSize: 28,
-  letterSpacing: '7px'
-}
+const homeLinkTextStyle = css`
+  font-weight: 200;
+  font-size: 28;
+  letter-spacing: 7px;
+`
 
-const footerStyle = {
-  borderTop: '1px solid #ededed',
-  height: `${footerHeight}px`,
-  padding: '0px 40px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontWeight: 200,
-  letterSpacing: '1px',
-  fontSize: '14px'
-}
+const footerStyle = css`
+  border-top: 1px solid #ededed;
+  height: ${footerHeight}px;
+  padding: 0px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 200;
+  letter-spacing: 1px;
+  font-size: 14px;
+`
 
-const containerStyle = {
-  minHeight: `calc(100vh - ${navHeight + footerHeight}px)`,
-  width: '900px',
-  margin: '0 auto',
-  padding: '40px'
-}
+const containerStyle = css`
+  min-height: calc(100vh - ${navHeight + footerHeight}px);
+  width: 900px;
+  margin: 0 auto;
+  padding: 40px;
+`
 
-const externalContainerLinkStyle = {
-  display: 'flex',
-  flex: '1',
-  justifyContent: 'flex-end'
-}
+const externalContainerLinkStyle = css`
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+`
 
-const linkParagraphStyle = {
-  fontSize: '12px',
-  fontWeight: 300
-}
+const linkParagraphStyle = css`
+  font-size: 12px;
+  font-weight: 300;
+`
 
-const linkStyle = {
-  color: '#0066ff'
-}
+const linkStyle = css`
+  color: #0066ff;
+`
 
 export default MyApp
