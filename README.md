@@ -39,9 +39,3 @@ export const APP_NAME = "YOUR_UNIQUE_APP_NAME"
 ```sh
 npm run dev
 ```
-
-### Limitations
-
-1. As of a couple of weeks ago, Bundlr was missing the indexing of some transactions on Arweave causing them to drop from GraphQL query after a set amount of time (though they were still saved to Arweave). Issue [here](https://github.com/Bundlr-Network/js-client/issues/35)
-
-2. Larger files (>100MB) have had trouble saving to Bundlr. This issue has been raised [here](https://github.com/Bundlr-Network/js-client/issues/40) and I've spoken to one of the engineers who says they are pushing out a fix (this is a Bundlr `js-client` issue)

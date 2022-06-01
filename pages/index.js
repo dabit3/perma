@@ -38,7 +38,7 @@ export default function Home() {
       {
         videos.map(video => (
           <div className={videoContainerStyle} key={video.URI}>
-            <video key={video.URI} width="620" controls>
+            <video key={video.URI} width="720px" height="405px" controls className={videoStyle}>
               <source src={video.URI} type="video/mp4"/>
             </video>
             <div className={titleContainerStyle}>
@@ -55,8 +55,14 @@ export default function Home() {
   )
 }
 
+
+const videoStyle = css`
+  background-color: rgba(0, 0, 0, .05);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+  `
+
 const containerStyle = css`
-  width: 620px;
+  width: 720px;
   margin: 0 auto;
   padding: 40px 20px;
   display: flex;

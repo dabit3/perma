@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 function MyApp({ Component, pageProps }) {
   const [bundlrInstance, setBundlrInstance] = useState()
-  const [balance, setBalance] = useState()
+  const [balance, setBalance] = useState(0)
   const [currency, setCurrency] = useState('matic')
 
   const bundlrRef = useRef()

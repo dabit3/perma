@@ -3,6 +3,7 @@ import { MainContext } from '../context'
 import { APP_NAME } from '../utils'
 import { useRouter } from 'next/router'
 import { css } from '@emotion/css'
+import { utils } from 'ethers'
 import BigNumber from 'bignumber.js'
 import Select from 'react-select'
 
@@ -25,6 +26,7 @@ export default function Profile() {
   const [file, setFile] = useState()
   const [image, setImage] = useState()
   const [title, setTitle] = useState('')
+  const [fileCost, setFileCost] = useState()
   const [description, setDescription] = useState('')
   const router = useRouter()
 
@@ -51,6 +53,7 @@ export default function Profile() {
 
   function onFileChange(e) {
     const file = e.target.files[0]
+    checkUploadCost(file.size)
     if (file) {
       const image = URL.createObjectURL(file)
       setImage(image)
@@ -62,6 +65,13 @@ export default function Profile() {
         }
       }
       reader.readAsArrayBuffer(file)
+    }
+  }
+
+  async function checkUploadCost(bytes) {
+    if (bytes) {
+      const cost = await bundlrInstance.getPrice(bytes)
+      setFileCost(utils.formatEther(cost.toString()))
     }
   }
 
@@ -133,7 +143,9 @@ export default function Profile() {
               <source src={image} type="video/mp4"/>
             </video>
           )
-
+        }
+        {
+          fileCost && <h4>Cost to upload: {Math.round((fileCost) * 1000) / 1000} MATIC</h4>
         }
         <button className={buttonStyle} onClick={uploadFile}>Upload Video</button>
         {
