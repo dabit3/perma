@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { MainContext } from '../context'
-import { APP_NAME } from '../utils'
+import { APP_NAME, tagSelectOptions } from '../utils'
 import { useRouter } from 'next/router'
 import { css } from '@emotion/css'
 import { utils } from 'ethers'
@@ -15,7 +15,7 @@ const supportedCurrencies = {
   arbitrum: 'arbitrum'
 }
 
-const options = Object.keys(supportedCurrencies).map(v => {
+const currencyOptions = Object.keys(supportedCurrencies).map(v => {
   return {
     value: v, label: v
   }
@@ -28,6 +28,7 @@ export default function Profile() {
   const [title, setTitle] = useState('')
   const [fileCost, setFileCost] = useState()
   const [description, setDescription] = useState('')
+  const [tagSelectState, setTagSelectState] = useState()
   const router = useRouter()
 
   const [URI, setURI] = useState()
@@ -36,9 +37,12 @@ export default function Profile() {
   async function fundWallet() {
     if (!amount) return
     const amountParsed = parseInput(amount)
-    let response = await bundlrInstance.fund(amountParsed)
-    console.log('Wallet funded: ', response)
-    fetchBalance()
+    try {
+      await bundlrInstance.fund(amountParsed)
+      fetchBalance()
+    } catch (err) {
+      console.log('Error funding wallet: ', err)
+    }
   }
 
   function parseInput (input) {
@@ -53,15 +57,15 @@ export default function Profile() {
 
   function onFileChange(e) {
     const file = e.target.files[0]
+    if (!file) return
     checkUploadCost(file.size)
     if (file) {
       const image = URL.createObjectURL(file)
       setImage(image)
       let reader = new FileReader()
-      reader.onload = function () {
+      reader.onload = function (e) {
         if (reader.result) {
           setFile(Buffer.from(reader.result))
-          console.log('file set...')
         }
       }
       reader.readAsArrayBuffer(file)
@@ -77,18 +81,27 @@ export default function Profile() {
 
   async function uploadFile() {
     if (!file) return
-    const tags = [{ name: 'Content-Type', value: 'video/mp4' }];
-    let tx = await bundlrInstance.uploader.upload(file, tags)
-    console.log('tx: ', tx)
-    setURI(`http://arweave.net/${tx.data.id}`)
+    const tags = [{ name: 'Content-Type', value: 'video/mp4' }]
+    try {
+      let tx = await bundlrInstance.uploader.upload(file, tags)
+      setURI(`http://arweave.net/${tx.data.id}`)
+    } catch (err) {
+      console.log('Error uploading video: ', err)
+    }
   }
 
   async function saveVideo() {
-    if (!file) return
+    if (!file || !title || !description) return
     const tags = [
       { name: 'Content-Type', value: 'text/plain' },
       { name: 'App-Name', value: APP_NAME }
     ]
+
+    if (tagSelectState) {
+      tags.push({
+        name: 'Topic', value: tagSelectState.value
+      })
+    }
 
     const video = {
       title,
@@ -98,14 +111,18 @@ export default function Profile() {
       createdBy: bundlrInstance.address,
     }
 
-    let tx = await bundlrInstance.createTransaction(JSON.stringify(video), { tags })
-    await tx.sign()
-    const { data } = await tx.upload()
+    try {
+      let tx = await bundlrInstance.createTransaction(JSON.stringify(video), { tags })
+      await tx.sign()
+      const { data } = await tx.upload()
 
-    console.log(`http://arweave.net/${data.id}`)
-    setTimeout(() => {
-      router.push('/')
-    }, 2000)
+      console.log(`http://arweave.net/${data.id}`)
+      setTimeout(() => {
+        router.push('/')
+      }, 2000)
+    } catch (err) {
+      console.log('error uploading video with metadata: ', err)
+    }
   }
 
   if (!bundlrInstance) {
@@ -114,8 +131,10 @@ export default function Profile() {
         <div className={selectContainerStyle} >
           <Select
             onChange={({ value }) => setCurrency(value)}
-            options={options}
+            options={currencyOptions}
             defaultValue={{ value: currency, label: currency }}
+            classNamePrefix="select"
+            instanceId="currency"
           />
           <p>Currency: {currency}</p>
         </div>
@@ -126,16 +145,17 @@ export default function Profile() {
     )
   }
 
+
   return (
     <div>
       <h3 className={balanceStyle}>💰 Balance {Math.round(balance * 100) / 100}</h3>
       <div className={formStyle}>
         <p className={labelStyle}>Add Video</p>
         <div className={inputContainerStyle}>
-        <input
-          type="file"
-          onChange={onFileChange}
-        />
+          <input
+            type="file"
+            onChange={onFileChange}
+          />
         </div>
         {
           image && (
@@ -155,6 +175,13 @@ export default function Profile() {
                 <a href={URI}>{URI}</a>
                </p>
                <div className={formStyle}>
+                 <p className={labelStyle}>Tag (optional)</p>
+                 <Select
+                   options={tagSelectOptions}
+                   className={selectStyle}
+                   onChange={data => setTagSelectState(data)}
+                   isClearable
+                   />
                  <p className={labelStyle}>Title</p>
                  <input className={inputStyle} onChange={e => setTitle(e.target.value)} placeholder='Video title' />
                  <p className={labelStyle}>Description</p>
@@ -174,6 +201,12 @@ export default function Profile() {
   )
 }
 
+const selectStyle = css`
+  margin-bottom: 20px;
+  min-width: 400px;
+  border-color: red;
+`
+
 const selectContainerStyle = css`
   margin: 10px 0px 20px;
 `
@@ -189,7 +222,7 @@ const containerStyle = css`
 `
 
 const inputContainerStyle = css`
-  margin: 0px 0px 25px;
+  margin: 0px 0px 15px;
 `
 
 const videoStyle = css`
@@ -219,7 +252,7 @@ const inputStyle = css`
   border: none;
   outline: none;
   background-color: rgba(0, 0, 0, .08);
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `
 
 const textAreaStyle = css`
@@ -231,10 +264,15 @@ const textAreaStyle = css`
 const buttonStyle = css`
   background-color: black;
   color: white;
-  padding: 15px 20px;
+  padding: 12px 40px;
   border-radius: 50px;
   font-weight: 700;
   width: 180;
+  transition: all .35s;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, .75);
+  }
 `
 
 const saveVideoButtonStyle = css`

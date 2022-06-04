@@ -1,7 +1,7 @@
 import Arweave from 'arweave'
 
 export const arweave = Arweave.init({})
-export const APP_NAME = "PERMA_VIDEO_APP_TEST_NAME_3"
+export const APP_NAME = process.env.NEXT_PUBLIC_ARWEAVE_APP_NAME || "PERMA_VIDEO_APP_TEST_NAME_3"
 
 export const createPostInfo = async (node) => {
   const ownerAddress = node.owner.address;
@@ -19,20 +19,31 @@ export const createPostInfo = async (node) => {
   return postInfo;
  }
 
- export const buildQuery = () => {
+ let tags = [
+  {
+    name: "App-Name",
+    values: [APP_NAME]
+  },
+  {
+    name: "Content-Type",
+    values: ["text/plain"]
+  }
+]
+
+ export const buildQuery = (topicFilter) => {
+  let stringifiedTags = [...tags]
+  if (topicFilter) {
+    stringifiedTags = [...tags, {
+      name: "Topic",
+      values: [topicFilter]
+    }]
+  }
+  stringifiedTags = JSON.stringify(stringifiedTags).replace(/"([^"]+)":/g, '$1:')
+
   const queryObject = { query: `{
     transactions(
       first: 50,
-      tags: [
-        {
-          name: "App-Name",
-          values: ["${APP_NAME}"]
-        },
-        {
-          name: "Content-Type",
-          values: ["text/plain"]
-        }
-      ]
+      tags: ${stringifiedTags}
     ) {
       edges {
         node {
@@ -58,3 +69,14 @@ export const createPostInfo = async (node) => {
   console.log('queryObject: ', queryObject)
   return queryObject;
 }
+
+export const tagSelectOptions = [
+  { value: 'daos', label: 'DAOs' },
+  { value: 'defi', label: 'DeFi' },
+  { value: 'nfts', label: 'NFTs' },
+  { value: 'developers', label: 'Developers' },
+  { value: 'gaming', label: 'Gaming' },
+  { value: 'investing', label: 'Investing' },
+  { value: 'public-goods', label: 'Public Goods' },
+  { value: 'education', label: 'Education' }
+]

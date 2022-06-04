@@ -1,6 +1,7 @@
-import { buildQuery, arweave, createPostInfo } from '../utils'
+import { buildQuery, arweave, createPostInfo, tagSelectOptions } from '../utils'
 import { useEffect, useState } from 'react'
 import { css } from '@emotion/css'
+import Select from 'react-select'
 
 const wait = (ms) => new Promise((res) => setTimeout(res, ms))
 
@@ -24,7 +25,6 @@ export default function Home() {
       )
       let sorted = posts.sort((a, b) => new Date(b.request.data.createdAt) - new Date(a.request.data.createdAt))
       sorted = sorted.map(s => s.request.data)
-      console.log('sorted: ', sorted)
       setVideos(sorted)
     } catch (err) {
       await wait(2 ** depth * 10)
@@ -33,12 +33,23 @@ export default function Home() {
     }
   }
 
+  async function runFilterQuery(data) {
+    getPostInfo(data ? data.value : null)
+  }
+
   return (
     <div className={containerStyle}>
+      <Select
+        options={tagSelectOptions}
+        className={selectStyle}
+        onChange={runFilterQuery}
+        isClearable
+        placeholder='Filter by category (optional)'
+      />
       {
         videos.map(video => (
           <div className={videoContainerStyle} key={video.URI}>
-            <video key={video.URI} width="720px" height="405px" controls className={videoStyle}>
+            <video key={video.URI} width="720px" height="405" controls className={videoStyle}>
               <source src={video.URI} type="video/mp4"/>
             </video>
             <div className={titleContainerStyle}>
@@ -55,6 +66,11 @@ export default function Home() {
   )
 }
 
+const selectStyle = css`
+  margin-bottom: 20px;
+  width: 100%;
+  border-color: red;
+`
 
 const videoStyle = css`
   background-color: rgba(0, 0, 0, .05);
@@ -72,8 +88,8 @@ const containerStyle = css`
 
 const iconStyle = css`
   width: 20px;
-  marginLeft: 19px;
-  marginTop: 14px;
+  margin-left: 19px;
+  margin-top: 4px;
 `
 
 const titleContainerStyle = css`
