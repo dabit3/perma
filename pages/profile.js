@@ -24,7 +24,7 @@ const currencyOptions = Object.keys(supportedCurrencies).map(v => {
 export default function Profile() {
   const { balance, bundlrInstance, fetchBalance, initialiseBundlr, currency, setCurrency } = useContext(MainContext)
   const [file, setFile] = useState()
-  const [image, setImage] = useState()
+  const [localVideo, setLocalVideo] = useState()
   const [title, setTitle] = useState('')
   const [fileCost, setFileCost] = useState()
   const [description, setDescription] = useState('')
@@ -60,8 +60,8 @@ export default function Profile() {
     if (!file) return
     checkUploadCost(file.size)
     if (file) {
-      const image = URL.createObjectURL(file)
-      setImage(image)
+      const video = URL.createObjectURL(file)
+      setLocalVideo(video)
       let reader = new FileReader()
       reader.onload = function (e) {
         if (reader.result) {
@@ -158,9 +158,9 @@ export default function Profile() {
           />
         </div>
         {
-          image && (
-            <video key={image} width="520" controls className={videoStyle}>
-              <source src={image} type="video/mp4"/>
+          localVideo && (
+            <video key={localVideo} width="520" controls className={videoStyle}>
+              <source src={localVideo} type="video/mp4"/>
             </video>
           )
         }
